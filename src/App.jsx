@@ -1,10 +1,18 @@
-import { DatePicker } from "antd";
+import { Route, Routes } from "react-router-dom";
+import NavBar from "./Components/NavBar/NavBar";
+import HomePage from "./Pages/HomePage/HomePage";
+import Sites from "./Pages/Sites/Sites";
+import WorkStation from "./Pages/WorkStation/WorkStation";
 
 function App() {
   return (
     <div className="App">
-      <h1>Hello World</h1>
-      <DatePicker />
+      <NavBar />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/sites" element={<Sites />} />
+        <Route path="/sites/:id" element={<WorkStation />} />
+      </Routes>
     </div>
   );
 }
