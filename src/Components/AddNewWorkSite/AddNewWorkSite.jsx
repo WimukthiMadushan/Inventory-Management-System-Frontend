@@ -1,42 +1,65 @@
 import React from "react";
-import { Form, Input, Select } from "antd";
+import { Form, Input, Select, Modal, Empty } from "antd";
 
 const { Option } = Select;
 
-const managers = ["John Doe", "Alice Smith", "Mark Taylor", "Emily Johnson"];
-
-const AddNewWorkSite = ({ onSubmit }) => {
+const AddNewWorkSite = ({
+  visible,
+  onCancel,
+  onSubmit,
+  confirmLoading,
+  workStationManagers = [], // default to empty array
+}) => {
   const [form] = Form.useForm();
 
-  const handleFinish = (values) => {
+  const handleFinish = async (values) => {
     onSubmit(values);
     form.resetFields();
   };
 
   return (
-    <Form layout="vertical" form={form} onFinish={handleFinish}>
-      <Form.Item
-        label="Work Site Name"
-        name="name"
-        rules={[{ required: true, message: "Please enter a site name" }]}
-      >
-        <Input placeholder="Enter work site name" />
-      </Form.Item>
+    <Modal
+      title="Add New Work Site"
+      open={visible}
+      onCancel={onCancel}
+      onOk={() => form.submit()}
+      confirmLoading={confirmLoading}
+      okText="Add Site"
+    >
+      <Form layout="vertical" form={form} onFinish={handleFinish}>
+        <Form.Item
+          label="Work Site Name"
+          name="name"
+          rules={[{ required: true, message: "Please enter a site name" }]}
+        >
+          <Input placeholder="Enter work site name" />
+        </Form.Item>
 
-      <Form.Item
-        label="Site Manager"
-        name="manager"
-        rules={[{ required: true, message: "Please select a site manager" }]}
-      >
-        <Select placeholder="Select a manager">
-          {managers.map((manager, index) => (
-            <Option key={index} value={manager}>
-              {manager}
-            </Option>
-          ))}
-        </Select>
-      </Form.Item>
-    </Form>
+        <Form.Item
+          label="Site Manager"
+          name="manager"
+          rules={[{ required: true, message: "Please select a site manager" }]}
+        >
+          {workStationManagers.length > 0 ? (
+            <Select placeholder="Select a manager">
+              {workStationManagers.map((manager) => (
+                <Option key={manager._id} value={manager._id}>
+                  {manager.name}
+                </Option>
+              ))}
+            </Select>
+          ) : (
+            <div className="border px-3 py-2 rounded text-gray-500 bg-gray-50">
+              No managers available to assign
+            </div>
+          )}
+        </Form.Item>
+
+        <Form.Item label="Address" name="address">
+          <Input.TextArea placeholder="Enter address (optional)" rows={3} />
+        </Form.Item>
+      </Form>
+    </Modal>
   );
 };
 

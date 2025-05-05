@@ -3,28 +3,26 @@ import { Modal, Button, Form, Input, Tabs } from "antd";
 
 const { TabPane } = Tabs;
 
-const Login = ({ isVisible, setIsVisible, activeTab, setActiveTab }) => {
-  const handleCancel = () => {
-    setIsVisible(false);
-  };
-
+const Login = ({
+  isVisible,
+  activeTab,
+  setActiveTab,
+  onSignUp,
+  onSignIn,
+  onCancel,
+}) => {
   const handleLogin = (values) => {
     console.log("Login:", values);
-    setIsVisible(false);
+    onSignIn(values);
   };
 
   const handleSignup = (values) => {
     console.log("Sign Up:", values);
-    setIsVisible(false);
+    onSignUp(values);
   };
 
   return (
-    <Modal
-      title="Welcome"
-      open={isVisible}
-      onCancel={handleCancel}
-      footer={null}
-    >
+    <Modal title="Welcome" open={isVisible} onCancel={onCancel} footer={null}>
       <Tabs activeKey={activeTab} onChange={setActiveTab} centered>
         <TabPane tab="Login" key="login">
           <Form layout="vertical" onFinish={handleLogin}>

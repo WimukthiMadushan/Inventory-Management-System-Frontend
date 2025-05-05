@@ -1,33 +1,20 @@
-import React, { useState } from "react";
-import { Button, Input, Modal } from "antd";
-import AddNewItem from "./../AddNewItem/AddNewItem";
-import SendItems from "./../SendItems/SendItems";
+import React from "react";
+import { useState } from "react";
+import { Button, Input } from "antd";
+import SendItems from "../SendItems/SendItems";
 
 const { Search } = Input;
 
-const Bar = ({
-  loadItems,
-  onSearch,
-  worksiteId,
-  items,
-  workstations,
-  onSend,
-}) => {
-  const [isAddModalVisible, setIsAddModalVisible] = useState(false);
+export const WorkStationBar = ({ onSearch }) => {
   const [isSendModalVisible, setIsSendModalVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
 
-  const handleAddNew = (values) => {
-    setIsAddModalVisible(false);
-    loadItems();
-  };
-
-  const handleSend = (values) => {
-    onSend(values);
-    setIsSendModalVisible(false);
-  };
   const handleSearch = () => {
     onSearch(searchText);
+  };
+  const handleSend = (values) => {
+    console.log("Send Item Submitted:", values);
+    setIsSendModalVisible(false);
   };
 
   return (
@@ -58,33 +45,10 @@ const Bar = ({
               />
               Send Items
             </Button>
-            <Button
-              type="primary"
-              className="bg-[#5B7BF9] hover:bg-blue-700 transition duration-300"
-              onClick={() => setIsAddModalVisible(true)}
-            >
-              + Add New Item
-            </Button>
           </div>
         </div>
       </div>
-
-      {/* Add Item Modal */}
-      <Modal
-        title="Add New Item"
-        open={isAddModalVisible}
-        onCancel={() => setIsAddModalVisible(false)}
-        footer={null}
-        destroyOnClose
-      >
-        <AddNewItem onSubmit={handleAddNew} worksiteId={worksiteId} />
-      </Modal>
-
-      {/* Send Items Modal */}
       <SendItems
-        items={items}
-        workstations={workstations}
-        worksiteId={worksiteId}
         open={isSendModalVisible}
         onCancel={() => setIsSendModalVisible(false)}
         onSend={handleSend}
@@ -92,5 +56,3 @@ const Bar = ({
     </>
   );
 };
-
-export default Bar;

@@ -7,14 +7,14 @@ const EditItemPopup = ({ open, onClose, onSubmit, item }) => {
   useEffect(() => {
     if (open && item) {
       form.setFieldsValue({
-        name: item.name,
+        name: item.itemName,
         quantity: item.quantity,
       });
     }
   }, [item, open, form]);
 
   const handleFinish = (values) => {
-    onSubmit({ ...item, ...values }); // Keep original item ID
+    onSubmit({ ...item, ...values });
     form.resetFields();
   };
 
@@ -32,7 +32,7 @@ const EditItemPopup = ({ open, onClose, onSubmit, item }) => {
           name="name"
           rules={[{ required: true, message: "Please enter item name" }]}
         >
-          <Input placeholder="Enter item name" />
+          <Input placeholder="Enter Item Name" />
         </Form.Item>
 
         <Form.Item

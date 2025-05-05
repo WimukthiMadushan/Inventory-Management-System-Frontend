@@ -1,8 +1,8 @@
-import React from "react";
-import { HomeFilled } from "@ant-design/icons";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import DeleteConfirmationPopup from "../DeleteConfirmationPopup/DeleteConfirmationPopup";
+import EditWorkStationPopup from "../EditWorkStationPopup/EditWorkStationPopup";
 
-// Tailwind's soft background colors
 const bgColors = [
   "bg-blue-100",
   "bg-green-100",
@@ -18,40 +18,63 @@ const bgColors = [
   "bg-amber-100",
 ];
 
-const workstations = Array.from({ length: 50 }, (_, i) => ({
-  id: i + 1,
-  name: `Work Station ${String(i + 1).padStart(2, "0")}`,
-}));
+const SitesCollection = ({
+  workstations,
+  DeleteWorkStation,
+  EditWorkStation,
+  workStationManagers,
+}) => {
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteItemId, setDeleteItemId] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editItemId, setEditItemId] = useState(null);
 
-const SitesCollection = () => {
   const handleEdit = (id) => {
-    console.log("Edit Workstation", id);
-    // Add your edit modal or redirect here
+    setEditItemId(id);
+    setShowEditModal(true);
   };
 
   const handleDelete = (id) => {
-    console.log("Delete Workstation", id);
-    // Add your confirmation or delete logic here
+    setDeleteItemId(id);
+    setShowDeleteModal(true);
+  };
+  const handleClose = () => {
+    setShowDeleteModal(false);
+    setDeleteItemId(null);
+  };
+  const handleConfirm = () => {
+    DeleteWorkStation(deleteItemId);
+    setShowDeleteModal(false);
+    setDeleteItemId(null);
+  };
+  const handleCloseEditModel = () => {
+    showEditModal(false);
+    setEditItemId(null);
+  };
+  const handleConfirmEditModel = (values) => {
+    EditWorkStation(values);
+    setShowEditModal(false);
+    setEditItemId(null);
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-6">
+    <div className="bg-white rounded-xl shadow-md p-6 min-h-[60vh]">
       <h1 className="text-xl font-bold text-gray-800 mb-4">All Workstations</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {workstations.map((station, index) => (
           <div
-            key={station.id}
+            key={station._id}
             className={`w-full h-full rounded-xl shadow-md transition duration-200 transform hover:scale-105 p-4 text-gray-800 font-semibold ${
               bgColors[index % bgColors.length]
             }`}
           >
             <div className="flex items-center justify-between w-full">
-              <Link to={`/sites/${station.id}`}>
-                <span>{station.name}</span>
+              <Link to={`/sites/${station._id}`}>
+                <span>{station.workSiteName}</span>
               </Link>
               <div className="flex space-x-2">
                 <button
-                  onClick={() => handleEdit(station.id)}
+                  onClick={() => handleEdit(station._id)}
                   className="p-1 bg-blue-200 rounded-sm hover:bg-blue-100  cursor-pointer"
                 >
                   <img
@@ -61,7 +84,7 @@ const SitesCollection = () => {
                   />
                 </button>
                 <button
-                  onClick={() => handleDelete(station.id)}
+                  onClick={() => handleDelete(station._id)}
                   className="p-1 bg-red-200 rounded-sm hover:bg-red-100 cursor-pointer"
                 >
                   <img
@@ -75,6 +98,30 @@ const SitesCollection = () => {
           </div>
         ))}
       </div>
+      {workstations.length === 0 && (
+        <div className="text-center text-gray-500 mt-4">
+          No workstations found.
+        </div>
+      )}
+      {workstations.length > 0 && (
+        <div className="text-center text-gray-500 mt-4">
+          Total Workstations: {workstations.length}
+        </div>
+      )}
+
+      <DeleteConfirmationPopup
+        open={showDeleteModal}
+        onClose={handleClose}
+        onConfirm={handleConfirm}
+      />
+      <EditWorkStationPopup
+        workStationManagers={workStationManagers}
+        workstations={workstations}
+        editItemId={editItemId}
+        open={showEditModal}
+        onClose={handleCloseEditModel}
+        onSubmit={handleConfirmEditModel}
+      />
     </div>
   );
 };

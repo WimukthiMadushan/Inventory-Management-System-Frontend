@@ -1,39 +1,49 @@
-import React, { useState } from "react";
-import { Modal, Form, Select, InputNumber } from "antd";
+import React, { useState, useEffect } from "react";
+import { Modal, Form, Select, InputNumber, message, Input } from "antd";
 
 const { Option } = Select;
 
-const sampleItems = [
-  { id: 1, name: "Hammer", available: 15 },
-  { id: 2, name: "Wrench", available: 8 },
-  { id: 3, name: "Drill", available: 5 },
-];
-
-const workstations = Array.from(
-  { length: 6 },
-  (_, i) => `Workstation ${i + 1}`
-);
-
-const SendItems = ({ open, onCancel, onSend }) => {
+const SendItems = ({
+  open,
+  onCancel,
+  onSend,
+  items,
+  worksiteId,
+  workstations,
+}) => {
   const [form] = Form.useForm();
-  const [selectedItemId, setSelectedItemId] = useState(null);
+  const [selectedItemId, setSelectedItemId] = useState();
 
-  const selectedItem = sampleItems.find((item) => item.id === selectedItemId);
+  const selectedItem = items.find((item) => item._id === selectedItemId);
+  const availableQuantity = selectedItem?.quantity || 0;
+
+  const sourceWorkstation = workstations.find((ws) => ws._id === worksiteId);
 
   const handleSubmit = (values) => {
+    console.log("Form values:", values);
+    if (values.from === values.to) {
+      message.error("Source and destination cannot be the same");
+      return;
+    }
     onSend(values);
     form.resetFields();
+    setSelectedItemId(null);
   };
 
   return (
     <Modal
       title="Send Items"
       open={open}
-      onCancel={onCancel}
+      onCancel={() => {
+        form.resetFields();
+        setSelectedItemId(null);
+        onCancel();
+      }}
       onOk={() => form.submit()}
       okText="Send"
     >
       <Form layout="vertical" form={form} onFinish={handleSubmit}>
+        {/* Item Selection */}
         <Form.Item
           label="Item"
           name="item"
@@ -42,43 +52,63 @@ const SendItems = ({ open, onCancel, onSend }) => {
           <Select
             placeholder="Select an item"
             onChange={(value) => setSelectedItemId(value)}
+            allowClear
           >
-            {sampleItems.map((item) => (
-              <Option key={item.id} value={item.id}>
-                {item.name}
+            {items.map((item) => (
+              <Option key={item._id} value={item._id}>
+                {item.itemName}
               </Option>
             ))}
           </Select>
         </Form.Item>
 
+        {/* Show Available Quantity */}
         {selectedItem && (
           <div className="mb-4 text-sm text-gray-600">
-            Available: <strong>{selectedItem.available}</strong>
+            Available: <strong>{availableQuantity}</strong>
           </div>
         )}
 
+        {/* Quantity Input */}
         <Form.Item
           label="Quantity"
           name="quantity"
-          rules={[{ required: true, message: "Enter quantity" }]}
+          rules={[
+            { required: true, message: "Enter quantity" },
+            {
+              validator: (_, value) => {
+                if (!value || value <= availableQuantity) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error("Cannot send more than available quantity")
+                );
+              },
+            },
+          ]}
         >
           <InputNumber min={1} className="w-full" />
         </Form.Item>
 
+        {/* From (disabled, pre-filled) */}
         <Form.Item
-          label="From"
           name="from"
-          rules={[{ required: true, message: "Select source workstation" }]}
+          initialValue={sourceWorkstation?._id}
+          rules={[{ required: true, message: "Source workstation required" }]}
+          hidden
         >
-          <Select placeholder="Select source">
-            {workstations.map((ws, i) => (
-              <Option key={i} value={ws}>
-                {ws}
-              </Option>
-            ))}
-          </Select>
+          <Input />
         </Form.Item>
 
+        {/* Display field for user */}
+        <Form.Item label="From">
+          <Input
+            disabled
+            value={sourceWorkstation?.workSiteName || "Unknown"}
+          />
+        </Form.Item>
+
+        {/* To (destination) */}
         <Form.Item
           label="To"
           name="to"
@@ -87,11 +117,13 @@ const SendItems = ({ open, onCancel, onSend }) => {
           ]}
         >
           <Select placeholder="Select destination">
-            {workstations.map((ws, i) => (
-              <Option key={i} value={ws}>
-                {ws}
-              </Option>
-            ))}
+            {workstations
+              .filter((ws) => ws._id !== worksiteId)
+              .map((ws) => (
+                <Option key={ws._id} value={ws._id}>
+                  {ws.workSiteName}
+                </Option>
+              ))}
           </Select>
         </Form.Item>
       </Form>
