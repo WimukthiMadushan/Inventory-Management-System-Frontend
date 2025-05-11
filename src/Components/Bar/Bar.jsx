@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button, Input, Modal } from "antd";
 import AddNewItem from "./../AddNewItem/AddNewItem";
 import SendItems from "./../SendItems/SendItems";

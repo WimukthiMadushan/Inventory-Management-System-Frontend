@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { useState } from "react";
 import { Modal, Form, Select, InputNumber, message, Input } from "antd";
 
 const { Option } = Select;

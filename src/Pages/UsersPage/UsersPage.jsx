@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import UsersBar from "../../Components/UsersBar/UsersBar";
 import UsersTable from "../../Components/UserTable/UsersTable";
-import { Delete } from "lucide-react";
 import { toast } from "react-toastify";
 import TableSkelton from "../../Components/Skelton/TableSkelton";
 

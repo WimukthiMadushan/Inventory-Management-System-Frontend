@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button, Input } from "antd";
 import axios from "axios";
 import AddNewWorkSite from "../AddNewWorkSite/AddNewWorkSite";

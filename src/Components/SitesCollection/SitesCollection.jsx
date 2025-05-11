@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import DeleteConfirmationPopup from "../DeleteConfirmationPopup/DeleteConfirmationPopup";
 import EditWorkStationPopup from "../EditWorkStationPopup/EditWorkStationPopup";
 import { useAuth } from "./../../Hooks/AuthContext.jsx";
-import { toast } from "react-toastify";
 
 const bgColors = [
   "bg-blue-100",

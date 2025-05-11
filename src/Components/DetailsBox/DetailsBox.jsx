@@ -1,5 +1,3 @@
-import React from "react";
-
 const DetailsBox = ({ icon, title, subtitle, value, iconBg }) => {
   return (
     <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-5 w-full min-w-[240px] max-w-sm flex-1">

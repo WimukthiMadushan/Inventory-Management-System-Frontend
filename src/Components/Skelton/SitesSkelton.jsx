@@ -1,5 +1,3 @@
-import React from "react";
-
 const SitesSkelton = ({ count = 6 }) => {
   return (
     <div className="bg-white rounded-xl shadow-md p-6 min-h-[60vh]">

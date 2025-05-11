@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Modal, Form, Input, InputNumber } from "antd";
 
 const EditItemPopup = ({ open, onClose, onSubmit, item }) => {

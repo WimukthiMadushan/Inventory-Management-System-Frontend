@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Form, Input, InputNumber } from "antd";
 
 const RemoveItemPopup = ({ open, onClose, onSubmit, defaultItemId, items }) => {

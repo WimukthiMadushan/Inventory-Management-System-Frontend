@@ -1,4 +1,3 @@
-import React from "react";
 import { Modal, Button, Form, Input, Tabs } from "antd";
 
 const { TabPane } = Tabs;

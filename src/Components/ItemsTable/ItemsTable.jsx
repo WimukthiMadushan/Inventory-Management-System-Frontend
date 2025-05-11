@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Select } from "antd";
 import Pagination from "./../Pagination/Pagination";
 import AddItemPopup from "./../AddItemPopup/AddItemPopup";

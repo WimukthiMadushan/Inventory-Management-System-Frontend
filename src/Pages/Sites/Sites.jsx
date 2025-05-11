@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import SitesCollection from "../../Components/SitesCollection/SitesCollection";
 import axios from "axios";
 import WorkSiteBar from "../../Components/WorkSiteBar/WorkSiteBar";

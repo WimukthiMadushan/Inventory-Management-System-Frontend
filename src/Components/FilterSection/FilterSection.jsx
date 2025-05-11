@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Select, DatePicker, Card, Row, Col, Button } from "antd";
-import dayjs from "dayjs";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
