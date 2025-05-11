@@ -6,7 +6,6 @@ import { useAuth } from "./../../Hooks/AuthContext.jsx";
 import { toast } from "react-toastify";
 
 const { Search } = Input;
-
 const API_URL = import.meta.env.VITE_API_URL;
 
 const WorkSiteBar = ({ onSearch, loadWorkStations, workStationManagers }) => {
@@ -21,6 +20,7 @@ const WorkSiteBar = ({ onSearch, loadWorkStations, workStationManagers }) => {
   const handleSearch = () => {
     onSearch(searchText);
   };
+
   const handleAddWorkSite = async (values) => {
     setAddLoading(true);
     const payload = {
@@ -49,24 +49,27 @@ const WorkSiteBar = ({ onSearch, loadWorkStations, workStationManagers }) => {
 
   return (
     <>
-      <div className="flex mb-6">
-        <div className="flex justify-between bg-white p-2 w-[100vw] py-3 px-[2rem] rounded-lg shadow-md">
+      <div className="mb-6 px-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-4 rounded-lg shadow-md w-full">
+          {/* Search Bar */}
           <Search
             placeholder="Search Work Sites..."
             allowClear
             onSearch={handleSearch}
             onChange={(e) => setSearchText(e.target.value)}
+            className="w-full md:w-[400px]"
             style={{
-              width: 500,
               border: "1px solid #d9d9d9",
               borderRadius: "8px",
             }}
           />
+
+          {/* Add Button (Admin only) */}
           {userId && role === "admin" && (
-            <div className="flex items-center gap-2">
+            <div className="w-full md:w-auto flex justify-end">
               <Button
                 type="primary"
-                className="bg-[#F5F5F5] hover:bg-gray-200 transition duration-300"
+                className="bg-[#5B7BF9] hover:bg-blue-700 transition duration-300 w-full md:w-auto"
                 onClick={() => setIsAddWorkStationModalVisible(true)}
               >
                 + Add WorkStations
@@ -75,6 +78,7 @@ const WorkSiteBar = ({ onSearch, loadWorkStations, workStationManagers }) => {
           )}
         </div>
       </div>
+
       <AddNewWorkSite
         workStationManagers={workStationManagers}
         visible={isAddWorkStationModalVisible}

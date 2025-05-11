@@ -2,6 +2,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   if (!currentPage || !totalPages || !onPageChange) return null;
   if (currentPage < 1 || currentPage > totalPages) return null;
   if (totalPages <= 1) return null;
+
   const getPageNumbers = () => {
     const pages = [];
     const maxVisible = 3;
@@ -23,9 +24,9 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   };
 
   return (
-    <div className="flex justify-center mt-4 space-x-1 text-sm">
+    <div className="flex flex-wrap justify-center mt-4 gap-2 text-sm">
       <button
-        className="px-3 py-1 rounded border border-gray-300 hover:bg-gray-100 disabled:opacity-50"
+        className="px-4 py-2 rounded border border-gray-300 hover:bg-gray-100 disabled:opacity-50 cursor-pointer"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
       >
@@ -35,9 +36,9 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       {getPageNumbers().map((num, index) => (
         <button
           key={index}
-          className={`px-3 py-1 rounded border ${
+          className={`cursor-pointer px-4 py-2 rounded border ${
             num === "..."
-              ? "border-transparent cursor-default"
+              ? "border-transparent cursor-default text-gray-500"
               : num === currentPage
               ? "bg-blue-600 text-white border-blue-600"
               : "border-gray-300 hover:bg-gray-100"
@@ -50,7 +51,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       ))}
 
       <button
-        className="px-3 py-1 rounded border border-gray-300 hover:bg-gray-100 disabled:opacity-50"
+        className="px-4 py-2 rounded border border-gray-300 hover:bg-gray-100 disabled:opacity-50 cursor-pointer"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >

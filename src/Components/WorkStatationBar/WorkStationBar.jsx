@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button, Input } from "antd";
 import SendItems from "../SendItems/SendItems";
 
@@ -18,6 +17,7 @@ export const WorkStationBar = ({
   const handleSearch = () => {
     onSearch(searchText);
   };
+
   const handleSend = (values) => {
     console.log("Send Item Submitted:", values);
     onSend(values);
@@ -26,23 +26,23 @@ export const WorkStationBar = ({
 
   return (
     <>
-      <div className="flex mb-6">
-        <div className="flex justify-between bg-white p-2 w-[100vw] py-3 px-[2rem] rounded-lg shadow-md">
+      <div className="mb-6 px-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 gap-4 rounded-lg shadow-md w-full">
           <Search
             placeholder="Search item..."
             allowClear
             onSearch={handleSearch}
             onChange={(e) => setSearchText(e.target.value)}
+            className="w-full md:w-[400px]"
             style={{
-              width: 500,
               border: "1px solid #d9d9d9",
               borderRadius: "8px",
             }}
           />
-          <div className="flex items-center gap-2">
+          <div className="w-full md:w-auto flex justify-end">
             <Button
               type="default"
-              className="bg-[#F5F5F5] hover:bg-gray-200 transition duration-300"
+              className="w-full md:w-auto flex items-center gap-2 bg-[#F5F5F5] hover:bg-gray-200 transition duration-300"
               onClick={() => setIsSendModalVisible(true)}
             >
               <img
@@ -50,11 +50,12 @@ export const WorkStationBar = ({
                 alt=""
                 className="w-4 h-4"
               />
-              Send Items
+              <span>Send Items</span>
             </Button>
           </div>
         </div>
       </div>
+
       <SendItems
         open={isSendModalVisible}
         onCancel={() => setIsSendModalVisible(false)}

@@ -29,32 +29,27 @@ const ItemsTable = ({
   const [deleteItemId, setDeleteItemId] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
 
-  const handleIncrease = (id) => {
-    console.log("Increase", id);
-    handleIncreaseItemByOne(id);
-  };
-  const handleDecrease = (id) => {
-    handleDecreaseItemByOne(id);
-  };
+  const handleIncrease = (id) => handleIncreaseItemByOne(id);
+  const handleDecrease = (id) => handleDecreaseItemByOne(id);
+
   const handleDelete = (id) => {
-    console.log("Delete", id);
     setDeleteItemId(id);
     setShowDeleteModal(true);
   };
   const handleDeleteConfirm = () => {
-    console.log("Confirmed Delete:", deleteItemId);
     DeleteItem(deleteItemId);
     setShowDeleteModal(false);
   };
+
   const handleAddItem = (id) => {
     setSelectedItemId(id);
     setShowAddModal(true);
   };
   const handleAddSubmit = (values) => {
-    console.log("Add Item Submit:", values);
     setShowAddModal(false);
     IncreaseItem(values);
   };
+
   const handleRemoveItem = (id) => {
     setSelectedItemId(id);
     setShowRemoveModal(true);
@@ -63,16 +58,17 @@ const ItemsTable = ({
     setShowRemoveModal(false);
     DecreaseItem(values);
   };
+
   const handleEdit = (id) => {
     const item = items.find((it) => it.id === id);
     setItemToEdit(item);
     setShowEditModal(true);
   };
   const handleEditSubmit = (updatedItem) => {
-    console.log("Updated Item:", updatedItem);
     setShowEditModal(false);
     EditItem(updatedItem);
   };
+
   const handleItemsPerPageChange = (value) => {
     setLimit(Number(value));
     setCurrentPage(1);
@@ -81,17 +77,18 @@ const ItemsTable = ({
   const paginatedItems = items;
 
   return (
-    <div className="flex-1 bg-white rounded-xl shadow-md p-4 overflow-x-auto">
-      <div className="flex justify-between items-center mb-4">
+    <div className="flex-1 bg-white rounded-xl shadow-md p-4">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
         <h1 className="text-xl font-bold text-gray-800">
           All Items In the Inventory
         </h1>
-        <div>
-          <label className="mr-2 font-medium">Items per page:</label>
+        <div className="flex items-center space-x-2">
+          <label className="font-medium">Items per page:</label>
           <Select
             value={limit}
             onChange={handleItemsPerPageChange}
-            className="w-[4rem]"
+            className="w-[5rem]"
             options={[
               { value: "5", label: "5" },
               { value: "10", label: "10" },
@@ -101,107 +98,107 @@ const ItemsTable = ({
         </div>
       </div>
 
+      {/* Table */}
       {items.length === 0 ? (
         <div className="text-center text-gray-500 py-12">
           No items available in the inventory.
         </div>
       ) : (
-        <table className="min-w-full table-auto text-center border border-gray-200">
-          <thead className="bg-gray-100 text-gray-700 text-center">
-            <tr>
-              <th>Image</th>
-              <th className="px-4 py-2">Item Name</th>
-              <th className="px-4 py-2">Availability</th>
-              <th className="px-4 py-2">Stock Quantity</th>
-              <th className="px-4 py-2">Last Updated</th>
-              <th className="px-4 py-2">Controls</th>
-              <th className="px-4 py-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="text-gray-600 text-center">
-            {paginatedItems.map((item) => (
-              <tr
-                key={item._id}
-                className="border-t border-gray-200 text-center"
-              >
-                <td className="px-4 py-2 cursor-pointer">
-                  <div className="flex justify-center items-center h-full">
-                    {item.image ? (
-                      <img
-                        className="w-[3rem] h-auto object-contain"
-                        src={item.image}
-                        alt="Image"
-                        onClick={() => setPreviewImage(item.image)}
-                      />
-                    ) : (
-                      <span className="text-gray-400">No Image</span>
-                    )}
-                  </div>
-                </td>
-                <td className="px-4 py-2">{item.itemName}</td>
-                <td className="px-4 py-2">
-                  {item.quantity > 0 ? (
-                    <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">
-                      In Stock
-                    </span>
-                  ) : (
-                    <span className="text-xs px-2 py-1 bg-red-100 text-red-700 rounded-full">
-                      Out of Stock
-                    </span>
-                  )}
-                </td>
-                <td className="px-4 py-2">{item.quantity}</td>
-                <td className="px-4 py-2">{item.lastUpdated}</td>
-                <td className="px-4 py-2 space-x-2">
-                  <button
-                    onClick={() => handleIncrease(item._id)}
-                    className="px-2 py-1 text-sm bg-blue-100 text-blue-700 rounded hover:bg-blue-200 cursor-pointer"
-                  >
-                    +
-                  </button>
-                  <button
-                    onClick={() => handleDecrease(item._id)}
-                    className="px-2 py-1 text-sm bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 cursor-pointer"
-                  >
-                    -
-                  </button>
-                  <button
-                    onClick={() => handleAddItem(item._id)}
-                    className="px-2 py-1 text-sm bg-blue-100 text-blue-700 rounded hover:bg-blue-200 cursor-pointer"
-                  >
-                    Add Item
-                  </button>
-                  <button
-                    onClick={() => handleRemoveItem(item._id)}
-                    className="px-2 py-1 text-sm bg-blue-100 text-blue-700 rounded hover:bg-blue-200 cursor-pointer"
-                  >
-                    Remove Item
-                  </button>
-                </td>
-                <td>
-                  <div className="flex space-x-2 justify-center">
-                    <button
-                      onClick={() => handleEdit(item.id)}
-                      className="px-2 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 cursor-pointer"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(item._id)}
-                      className="px-2 py-1 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200 cursor-pointer"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="min-w-full table-auto text-center border border-gray-200">
+            <thead className="bg-gray-100 text-gray-700 text-center text-sm">
+              <tr>
+                <th className="px-4 py-2">Image</th>
+                <th className="px-4 py-2">Item Name</th>
+                <th className="px-4 py-2">Availability</th>
+                <th className="px-4 py-2">Stock Quantity</th>
+                <th className="px-4 py-2">Last Updated</th>
+                <th className="px-4 py-2">Controls</th>
+                <th className="px-4 py-2">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="text-gray-600 text-sm">
+              {paginatedItems.map((item) => (
+                <tr key={item._id} className="border-t border-gray-200">
+                  <td className="px-4 py-2 cursor-pointer">
+                    <div className="flex justify-center items-center">
+                      {item.image ? (
+                        <img
+                          className="w-12 h-12 object-contain"
+                          src={item.image}
+                          alt="Item"
+                          onClick={() => setPreviewImage(item.image)}
+                        />
+                      ) : (
+                        <span className="text-gray-400 text-xs">No Image</span>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-4 py-2">{item.itemName}</td>
+                  <td className="px-4 py-2">
+                    <span
+                      className={`text-xs px-2 py-1 rounded-full ${
+                        item.quantity > 0
+                          ? "bg-green-100 text-green-700"
+                          : "bg-red-100 text-red-700"
+                      }`}
+                    >
+                      {item.quantity > 0 ? "In Stock" : "Out of Stock"}
+                    </span>
+                  </td>
+                  <td className="px-4 py-2">{item.quantity}</td>
+                  <td className="px-4 py-2">{item.lastUpdated}</td>
+                  <td className="px-4 py-2 flex flex-wrap gap-1 justify-center">
+                    <button
+                      onClick={() => handleIncrease(item._id)}
+                      className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+                    >
+                      +
+                    </button>
+                    <button
+                      onClick={() => handleDecrease(item._id)}
+                      className="px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200"
+                    >
+                      -
+                    </button>
+                    <button
+                      onClick={() => handleAddItem(item._id)}
+                      className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+                    >
+                      Add
+                    </button>
+                    <button
+                      onClick={() => handleRemoveItem(item._id)}
+                      className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+                    >
+                      Remove
+                    </button>
+                  </td>
+                  <td>
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      <button
+                        onClick={() => handleEdit(item.id)}
+                        className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(item._id)}
+                        className="px-2 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
-      {/* Pagination Controls */}
-      <div className="flex justify-center mt-4 space-x-2">
+      {/* Pagination */}
+      <div className="flex justify-center mt-4">
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
@@ -209,6 +206,7 @@ const ItemsTable = ({
         />
       </div>
 
+      {/* Modals */}
       <AddItemPopup
         open={showAddModal}
         onClose={() => setShowAddModal(false)}
@@ -223,7 +221,6 @@ const ItemsTable = ({
         defaultItemId={selectedItemId}
         items={items}
       />
-
       <EditItemPopup
         open={showEditModal}
         onClose={() => setShowEditModal(false)}
@@ -235,22 +232,21 @@ const ItemsTable = ({
         onClose={() => setShowDeleteModal(false)}
         onConfirm={handleDeleteConfirm}
       />
+
+      {/* Image Preview */}
       {previewImage && (
-        <div className="fixed inset-0 bg-black bg-opacity-10 z-50 flex justify-center items-center">
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
           <div className="relative bg-white p-4 rounded-md shadow-xl">
             <button
               onClick={() => setPreviewImage(null)}
-              className="absolute top-1 right-1 text-gray-600 hover:text-black text-xl cursor-pointer transition-transform duration-200 hover:scale-110"
+              className="absolute top-1 right-1 text-gray-600 hover:text-black text-xl cursor-pointer"
             >
-              <img
-                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS14LWljb24gbHVjaWRlLXgiPjxwYXRoIGQ9Ik0xOCA2IDYgMTgiLz48cGF0aCBkPSJtNiA2IDEyIDEyIi8+PC9zdmc+"
-                alt="Cross Icon"
-              />
+              ✕
             </button>
             <img
               src={previewImage}
               alt="Preview"
-              className="max-w-[80vw] max-h-[80vh] rounded"
+              className="max-w-[90vw] max-h-[80vh] rounded"
             />
           </div>
         </div>

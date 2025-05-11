@@ -16,13 +16,11 @@ const UsersTable = ({
   const [deleteUserId, setDeleteUserId] = useState(null);
 
   const handleDelete = (id) => {
-    //console.log("Delete", id);
     setDeleteUserId(id);
     setShowDeleteModal(true);
   };
 
   const handleDeleteConfirm = () => {
-    //console.log("Confirmed Delete:", deleteUserId);
     DeleteUser(deleteUserId);
     setShowDeleteModal(false);
   };
@@ -36,16 +34,17 @@ const UsersTable = ({
 
   return (
     <>
-      <div className="flex justify-between items-center mb-4">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
         <h1 className="text-xl font-bold text-gray-800">
           All Users In the Inventory
         </h1>
-        <div>
-          <label className="mr-2 font-medium">Items per page:</label>
+        <div className="flex items-center space-x-2">
+          <label className="font-medium">Items per page:</label>
           <Select
             value={limit}
             onChange={handleItemsPerPageChange}
-            className="w-[4rem]"
+            className="w-[5rem]"
             options={[
               { value: "5", label: "5" },
               { value: "10", label: "10" },
@@ -55,51 +54,55 @@ const UsersTable = ({
         </div>
       </div>
 
+      {/* Table Section */}
       {paginatedUsers.length > 0 ? (
         <>
-          <table className="min-w-full table-auto text-center border border-gray-200">
-            <thead className="bg-gray-100 text-gray-700 text-center">
-              <tr>
-                <th className="px-4 py-2">Name</th>
-                <th className="px-4 py-2">Email</th>
-                <th className="px-4 py-2">Role</th>
-                <th className="px-4 py-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="text-gray-600 text-center">
-              {paginatedUsers.map((user, index) => (
-                <tr
-                  key={user._id || index}
-                  className="border-t border-gray-200 text-center"
-                >
-                  <td className="px-4 py-2">{user.name}</td>
-                  <td className="px-4 py-2">{user.email}</td>
-                  <td className="px-4 py-2">
-                    <span
-                      className={`text-xs px-2 py-1 rounded-full ${
-                        user.status === "admin"
-                          ? "bg-blue-100 text-blue-700"
-                          : "bg-green-100 text-green-700"
-                      }`}
-                    >
-                      {user.status}
-                    </span>
-                  </td>
-                  <td className="px-4 py-2">
-                    <div className="flex space-x-2 justify-center">
-                      <button
-                        onClick={() => handleDelete(user._id)}
-                        className="px-2 py-1 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200 cursor-pointer"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="min-w-full table-auto text-center border border-gray-200">
+              <thead className="bg-gray-100 text-gray-700 text-sm">
+                <tr>
+                  <th className="px-4 py-2">Name</th>
+                  <th className="px-4 py-2">Email</th>
+                  <th className="px-4 py-2">Role</th>
+                  <th className="px-4 py-2">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="text-gray-600 text-sm">
+                {paginatedUsers.map((user, index) => (
+                  <tr
+                    key={user._id || index}
+                    className="border-t border-gray-200"
+                  >
+                    <td className="px-4 py-2">{user.name}</td>
+                    <td className="px-4 py-2">{user.email}</td>
+                    <td className="px-4 py-2">
+                      <span
+                        className={`text-xs px-2 py-1 rounded-full ${
+                          user.status === "admin"
+                            ? "bg-blue-100 text-blue-700"
+                            : "bg-green-100 text-green-700"
+                        }`}
+                      >
+                        {user.status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-2">
+                      <div className="flex justify-center">
+                        <button
+                          onClick={() => handleDelete(user._id)}
+                          className="px-2 py-1 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
+          {/* Pagination */}
           <div className="flex justify-center mt-4 space-x-2">
             <Pagination
               currentPage={currentPage}
@@ -113,6 +116,8 @@ const UsersTable = ({
           No users available to display.
         </div>
       )}
+
+      {/* Delete Modal */}
       <DeleteConfirmationPopup
         open={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}

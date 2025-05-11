@@ -38,23 +38,28 @@ const SitesCollection = ({
     setEditItemId(id);
     setShowEditModal(true);
   };
+
   const handleDelete = (id) => {
     setDeleteItemId(id);
     setShowDeleteModal(true);
   };
+
   const handleClose = () => {
     setShowDeleteModal(false);
     setDeleteItemId(null);
   };
+
   const handleConfirm = () => {
     DeleteWorkStation(deleteItemId);
     setShowDeleteModal(false);
     setDeleteItemId(null);
   };
+
   const handleCloseEditModel = () => {
     setShowEditModal(false);
     setEditItemId(null);
   };
+
   const handleConfirmEditModel = (values) => {
     EditWorkStation(values);
     setShowEditModal(false);
@@ -63,46 +68,49 @@ const SitesCollection = ({
 
   return (
     <div className="bg-white rounded-xl shadow-md p-6 min-h-[60vh]">
-      <div className="flex items-center justify-between mb-[2rem]">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-2">
         <h1 className="text-xl font-bold text-gray-800">All Workstations</h1>
         {workstations.length > 0 && (
-          <span className="text-sm text-gray-600 font-bold">
+          <span className="text-sm text-gray-600 font-semibold">
             Total Workstations: {workstations.length}
           </span>
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
         {workstations.map((station, index) => (
           <div
             key={station._id}
-            className={`w-full h-full rounded-xl shadow-md transition duration-200 transform hover:scale-105 p-4 text-gray-800 font-semibold ${
+            className={`w-full rounded-xl shadow-md transition transform hover:scale-105 p-4 text-gray-800 font-semibold ${
               bgColors[index % bgColors.length]
             }`}
           >
-            <div className="flex items-center justify-between w-full">
-              <Link to={`/sites/${station._id}`}>
-                <span>{station.workSiteName}</span>
+            <div className="flex flex-col gap-2 sm:flex-row justify-between items-start sm:items-center">
+              <Link
+                to={`/sites/${station._id}`}
+                className="text-base truncate max-w-full"
+              >
+                {station.workSiteName}
               </Link>
               {role === "admin" && (
-                <div className="flex space-x-2">
+                <div className="flex space-x-2 mt-2 sm:mt-0">
                   <button
                     onClick={() => handleEdit(station._id)}
-                    className="p-1 bg-blue-200 rounded-sm hover:bg-blue-100  cursor-pointer"
+                    className="p-1 bg-blue-200 rounded-sm hover:bg-blue-100"
                   >
                     <img
                       src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1wZW5jaWwtaWNvbiBsdWNpZGUtcGVuY2lsIj48cGF0aCBkPSJNMjEuMTc0IDYuODEyYTEgMSAwIDAgMC0zLjk4Ni0zLjk4N0wzLjg0MiAxNi4xNzRhMiAyIDAgMCAwLS41LjgzbC0xLjMyMSA0LjM1MmEuNS41IDAgMCAwIC42MjMuNjIybDQuMzUzLTEuMzJhMiAyIDAgMCAwIC44My0uNDk3eiIvPjxwYXRoIGQ9Im0xNSA1IDQgNCIvPjwvc3ZnPg=="
-                      alt="Edit Icon"
+                      alt="Edit"
                       className="w-5 h-5"
                     />
                   </button>
                   <button
                     onClick={() => handleDelete(station._id)}
-                    className="p-1 bg-red-200 rounded-sm hover:bg-red-100 cursor-pointer"
+                    className="p-1 bg-red-200 rounded-sm hover:bg-red-100"
                   >
                     <img
                       src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS10cmFzaC1pY29uIGx1Y2lkZS10cmFzaCI+PHBhdGggZD0iTTMgNmgxOCIvPjxwYXRoIGQ9Ik0xOSA2djE0YzAgMS0xIDItMiAySDdjLTEgMC0yLTEtMi0yVjYiLz48cGF0aCBkPSJNOCA2VjRjMC0xIDEtMiAyLTJoNGMxIDAgMiAxIDIgMnYyIi8+PC9zdmc+"
-                      alt="Delete Icon"
+                      alt="Delete"
                       className="w-5 h-5"
                     />
                   </button>
@@ -112,8 +120,9 @@ const SitesCollection = ({
           </div>
         ))}
       </div>
+
       {workstations.length === 0 && (
-        <div className="text-center text-gray-500 mt-4">
+        <div className="text-center text-gray-500 mt-6">
           No workstations found.
         </div>
       )}
