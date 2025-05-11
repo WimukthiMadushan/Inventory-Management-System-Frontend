@@ -13,7 +13,6 @@ const MainInventory = () => {
   const { worksiteId } = useParams();
   const [items, setItems] = useState([]);
   const [workstations, setWorkstations] = useState([]);
-  const [transactions, setTransaction] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -69,6 +68,7 @@ const MainInventory = () => {
   useEffect(() => {
     loadWorkstations();
   }, []);
+
   const handleSearch = (value) => {
     setSearch(value);
   };
