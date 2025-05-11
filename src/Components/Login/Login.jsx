@@ -10,15 +10,25 @@ const Login = ({
   onSignUp,
   onSignIn,
   onCancel,
+  loading,
+  setLoading,
 }) => {
-  const handleLogin = (values) => {
-    console.log("Login:", values);
-    onSignIn(values);
+  const handleLogin = async (values) => {
+    setLoading(true);
+    try {
+      await onSignIn(values);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSignup = (values) => {
-    console.log("Sign Up:", values);
-    onSignUp(values);
+  const handleSignup = async (values) => {
+    setLoading(true);
+    try {
+      await onSignUp(values);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -31,7 +41,7 @@ const Login = ({
               name="email"
               rules={[{ required: true, message: "Please input your email!" }]}
             >
-              <Input />
+              <Input disabled={loading} />
             </Form.Item>
             <Form.Item
               label="Password"
@@ -40,10 +50,10 @@ const Login = ({
                 { required: true, message: "Please input your password!" },
               ]}
             >
-              <Input.Password />
+              <Input.Password disabled={loading} />
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit" block>
+              <Button type="primary" htmlType="submit" block loading={loading}>
                 Log In
               </Button>
             </Form.Item>
@@ -57,14 +67,14 @@ const Login = ({
               name="name"
               rules={[{ required: true, message: "Please input your name!" }]}
             >
-              <Input />
+              <Input disabled={loading} />
             </Form.Item>
             <Form.Item
               label="Email"
               name="email"
               rules={[{ required: true, message: "Please input your email!" }]}
             >
-              <Input />
+              <Input disabled={loading} />
             </Form.Item>
             <Form.Item
               label="Password"
@@ -73,10 +83,10 @@ const Login = ({
                 { required: true, message: "Please input your password!" },
               ]}
             >
-              <Input.Password />
+              <Input.Password disabled={loading} />
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit" block>
+              <Button type="primary" htmlType="submit" block loading={loading}>
                 Sign Up
               </Button>
             </Form.Item>

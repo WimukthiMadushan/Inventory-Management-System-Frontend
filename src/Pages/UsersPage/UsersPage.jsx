@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import UsersBar from "../../Components/UsersBar/UsersBar";
 import UsersTable from "../../Components/UserTable/UsersTable";
+import { Delete } from "lucide-react";
+import { toast } from "react-toastify";
+import TableSkelton from "../../Components/Skelton/TableSkelton";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -39,11 +42,13 @@ const UsersPage = () => {
     setLoading(true);
     try {
       const response = await axios.post(`${API_URL}/User/signup`, values);
-      setUsers((prevUsers) => [...prevUsers, response.data]);
+      setUsers((prevUsers) => [...prevUsers, response.data.user]);
       setIsAddUserVisible(false);
+      toast.success(response.data.message);
     } catch (error) {
       console.error("Error adding user:", error);
       setError("Failed to add user");
+      toast.error(error.response?.data || "Failed to add user");
     } finally {
       setLoading(false);
     }
@@ -51,6 +56,30 @@ const UsersPage = () => {
   const handleSearch = (text) => {
     setSearchText(text);
     setPage(1);
+  };
+  const DeleteUser = async (id) => {
+    setLoading(true);
+    try {
+      const response = await axios.delete(`${API_URL}/User/deleteuser/${id}`);
+
+      setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id));
+      toast.success("User deleted successfully");
+    } catch (error) {
+      console.error("Error deleting user:", error);
+
+      // Check for known backend error messages
+      if (error.response?.status === 400 && error.response?.data?.message) {
+        toast.info(error.response.data.message);
+      } else if (error.response?.status === 404) {
+        toast.warn("User not found.");
+      } else {
+        toast.error("Failed to delete user.");
+      }
+
+      setError("Failed to delete user");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -62,14 +91,21 @@ const UsersPage = () => {
         loading={loading}
         onSearch={handleSearch}
       />
-      <UsersTable
-        users={users}
-        currentPage={page}
-        totalPages={totalPages}
-        limit={limit}
-        setLimit={setLimit}
-        setCurrentPage={setPage}
-      />
+      {loading ? (
+        <TableSkelton rows={5} />
+      ) : error ? (
+        <p className="text-red-500">{error}</p>
+      ) : (
+        <UsersTable
+          users={users}
+          currentPage={page}
+          totalPages={totalPages}
+          limit={limit}
+          setLimit={setLimit}
+          setCurrentPage={setPage}
+          DeleteUser={DeleteUser}
+        />
+      )}
     </div>
   );
 };

@@ -5,7 +5,13 @@ import SendItems from "../SendItems/SendItems";
 
 const { Search } = Input;
 
-export const WorkStationBar = ({ onSearch }) => {
+export const WorkStationBar = ({
+  onSearch,
+  items,
+  workstations,
+  worksiteId,
+  onSend,
+}) => {
   const [isSendModalVisible, setIsSendModalVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
 
@@ -14,6 +20,7 @@ export const WorkStationBar = ({ onSearch }) => {
   };
   const handleSend = (values) => {
     console.log("Send Item Submitted:", values);
+    onSend(values);
     setIsSendModalVisible(false);
   };
 
@@ -52,6 +59,9 @@ export const WorkStationBar = ({ onSearch }) => {
         open={isSendModalVisible}
         onCancel={() => setIsSendModalVisible(false)}
         onSend={handleSend}
+        items={items}
+        workstations={workstations}
+        worksiteId={worksiteId}
       />
     </>
   );

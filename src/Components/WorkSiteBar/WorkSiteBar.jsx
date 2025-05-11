@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Button, Input } from "antd";
 import axios from "axios";
-import SendItems from "../SendItems/SendItems";
 import AddNewWorkSite from "../AddNewWorkSite/AddNewWorkSite";
+import { useAuth } from "./../../Hooks/AuthContext.jsx";
+import { toast } from "react-toastify";
 
 const { Search } = Input;
 
@@ -14,6 +15,9 @@ const WorkSiteBar = ({ onSearch, loadWorkStations, workStationManagers }) => {
   const [searchText, setSearchText] = useState("");
   const [addLoading, setAddLoading] = useState(false);
 
+  const { authState } = useAuth();
+  const { userId, role } = authState;
+
   const handleSearch = () => {
     onSearch(searchText);
   };
@@ -23,16 +27,19 @@ const WorkSiteBar = ({ onSearch, loadWorkStations, workStationManagers }) => {
       workSiteName: values.name,
       address: values.address || "",
       workSiteManager: values.manager,
+      userId: userId,
     };
     try {
       const response = await axios.post(`${API_URL}/WorkSite/addSite`, payload);
       console.log("Server response:", response.data);
       loadWorkStations();
+      toast.success("Work site added successfully!");
     } catch (error) {
       console.error(
         "Error adding work site:",
         error.response?.data || error.message
       );
+      toast.error("Failed to add work site. Please try again.");
     } finally {
       setIsAddWorkStationModalVisible(false);
       setAddLoading(false);
@@ -55,15 +62,17 @@ const WorkSiteBar = ({ onSearch, loadWorkStations, workStationManagers }) => {
               borderRadius: "8px",
             }}
           />
-          <div className="flex items-center gap-2">
-            <Button
-              type="primary"
-              className="bg-[#F5F5F5] hover:bg-gray-200 transition duration-300"
-              onClick={() => setIsAddWorkStationModalVisible(true)}
-            >
-              + Add WorkStations
-            </Button>
-          </div>
+          {userId && role === "admin" && (
+            <div className="flex items-center gap-2">
+              <Button
+                type="primary"
+                className="bg-[#F5F5F5] hover:bg-gray-200 transition duration-300"
+                onClick={() => setIsAddWorkStationModalVisible(true)}
+              >
+                + Add WorkStations
+              </Button>
+            </div>
+          )}
         </div>
       </div>
       <AddNewWorkSite

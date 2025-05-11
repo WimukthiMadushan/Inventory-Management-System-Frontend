@@ -27,6 +27,7 @@ const ItemsTable = ({
   const [itemToEdit, setItemToEdit] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
 
   const handleIncrease = (id) => {
     console.log("Increase", id);
@@ -45,7 +46,6 @@ const ItemsTable = ({
     DeleteItem(deleteItemId);
     setShowDeleteModal(false);
   };
-
   const handleAddItem = (id) => {
     setSelectedItemId(id);
     setShowAddModal(true);
@@ -109,6 +109,7 @@ const ItemsTable = ({
         <table className="min-w-full table-auto text-center border border-gray-200">
           <thead className="bg-gray-100 text-gray-700 text-center">
             <tr>
+              <th>Image</th>
               <th className="px-4 py-2">Item Name</th>
               <th className="px-4 py-2">Availability</th>
               <th className="px-4 py-2">Stock Quantity</th>
@@ -123,6 +124,20 @@ const ItemsTable = ({
                 key={item._id}
                 className="border-t border-gray-200 text-center"
               >
+                <td className="px-4 py-2 cursor-pointer">
+                  <div className="flex justify-center items-center h-full">
+                    {item.image ? (
+                      <img
+                        className="w-[3rem] h-auto object-contain"
+                        src={item.image}
+                        alt="Image"
+                        onClick={() => setPreviewImage(item.image)}
+                      />
+                    ) : (
+                      <span className="text-gray-400">No Image</span>
+                    )}
+                  </div>
+                </td>
                 <td className="px-4 py-2">{item.itemName}</td>
                 <td className="px-4 py-2">
                   {item.quantity > 0 ? (
@@ -220,6 +235,26 @@ const ItemsTable = ({
         onClose={() => setShowDeleteModal(false)}
         onConfirm={handleDeleteConfirm}
       />
+      {previewImage && (
+        <div className="fixed inset-0 bg-black bg-opacity-10 z-50 flex justify-center items-center">
+          <div className="relative bg-white p-4 rounded-md shadow-xl">
+            <button
+              onClick={() => setPreviewImage(null)}
+              className="absolute top-1 right-1 text-gray-600 hover:text-black text-xl cursor-pointer transition-transform duration-200 hover:scale-110"
+            >
+              <img
+                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS14LWljb24gbHVjaWRlLXgiPjxwYXRoIGQ9Ik0xOCA2IDYgMTgiLz48cGF0aCBkPSJtNiA2IDEyIDEyIi8+PC9zdmc+"
+                alt="Cross Icon"
+              />
+            </button>
+            <img
+              src={previewImage}
+              alt="Preview"
+              className="max-w-[80vw] max-h-[80vh] rounded"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

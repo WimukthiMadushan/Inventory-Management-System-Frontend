@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Modal, Form, Input, Select } from "antd";
 
 const { Option } = Select;
@@ -13,10 +13,8 @@ const EditWorkStationPopup = ({
 }) => {
   const [form] = Form.useForm();
 
-  //console.log("Workstation Managers:", workStationManagers);
-
   const managersList = workStationManagers || [];
-  //console.log("Managers List:", managersList);
+
   const defaultValues = useMemo(() => {
     const workstation = workstations.find((item) => item._id === editItemId);
     return workstation || null;
@@ -44,6 +42,7 @@ const EditWorkStationPopup = ({
   };
 
   const handleCancel = () => {
+    console.log("Cancelled");
     form.resetFields();
     onClose();
   };
@@ -71,10 +70,17 @@ const EditWorkStationPopup = ({
           label="Workstation Manager"
           rules={[{ required: true, message: "Please select a manager" }]}
         >
-          <Select placeholder="Select a manager">
+          <Select
+            showSearch
+            allowClear
+            filterOption={(input, option) =>
+              option.children.toLowerCase().includes(input.toLowerCase())
+            }
+            placeholder="Select a manager"
+          >
             {managersList.map((manager) => (
-              <Option key={manager} value={manager}>
-                {manager}
+              <Option key={manager._id} value={manager._id}>
+                {manager.name}
               </Option>
             ))}
           </Select>

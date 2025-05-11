@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Modal, Form, Select, InputNumber, message, Input } from "antd";
 
 const { Option } = Select;
@@ -53,6 +54,10 @@ const SendItems = ({
             placeholder="Select an item"
             onChange={(value) => setSelectedItemId(value)}
             allowClear
+            showSearch
+            filterOption={(input, option) =>
+              option.children.toLowerCase().includes(input.toLowerCase())
+            }
           >
             {items.map((item) => (
               <Option key={item._id} value={item._id}>
@@ -116,7 +121,14 @@ const SendItems = ({
             { required: true, message: "Select destination workstation" },
           ]}
         >
-          <Select placeholder="Select destination">
+          <Select
+            showSearch
+            allowClear
+            filterOption={(input, option) =>
+              option.children.toLowerCase().includes(input.toLowerCase())
+            }
+            placeholder="Select destination"
+          >
             {workstations
               .filter((ws) => ws._id !== worksiteId)
               .map((ws) => (

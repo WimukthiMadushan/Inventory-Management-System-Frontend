@@ -3,6 +3,8 @@ import SitesCollection from "../../Components/SitesCollection/SitesCollection";
 import axios from "axios";
 import WorkSiteBar from "../../Components/WorkSiteBar/WorkSiteBar";
 import SitesSkelton from "../../Components/Skelton/SitesSkelton";
+import { useAuth } from "./../../Hooks/AuthContext.jsx";
+import { toast } from "react-toastify";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const MainInventoryID = import.meta.env.VITE_MAIN_INVENTORY_ID;
@@ -13,6 +15,9 @@ const Sites = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const { authState } = useAuth();
+  const { userId } = authState;
 
   const loadWorkStationManagers = async () => {
     try {
@@ -55,19 +60,26 @@ const Sites = () => {
   const handleDeleteWorkStation = async (id) => {
     console.log("Delete Workstation", id);
     try {
-      await axios.delete(`${API_URL}/WorkSite/deleteSite/${id}`);
+      await axios.delete(`${API_URL}/WorkSite/deleteSite/${id}`, {
+        data: { userId: userId },
+      });
       setWorkstations((prevWorkstations) =>
         prevWorkstations.filter((workstation) => workstation._id !== id)
       );
+      toast.success("Workstation deleted successfully");
     } catch (error) {
       console.error("Error deleting workstation:", error);
       setError("Failed to delete workstation");
+      toast.error("Failed to delete workstation");
     }
   };
   const handleEditWorkStation = async (values) => {
     console.log("Edit Workstation", values);
     try {
-      await axios.put(`${API_URL}/WorkSite/updateSite/${values._id}`, values);
+      await axios.put(`${API_URL}/WorkSite/updateSite/${values._id}`, {
+        ...values,
+        userId: userId,
+      });
       setWorkstations((prevWorkstations) =>
         prevWorkstations.map((workstation) =>
           workstation._id === values._id
@@ -75,9 +87,11 @@ const Sites = () => {
             : workstation
         )
       );
+      toast.success("Workstation updated successfully");
     } catch (error) {
       console.error("Error editing workstation:", error);
       setError("Failed to edit workstation");
+      toast.error("Failed to edit workstation");
     }
   };
 

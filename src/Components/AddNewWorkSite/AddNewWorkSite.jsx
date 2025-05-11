@@ -8,7 +8,7 @@ const AddNewWorkSite = ({
   onCancel,
   onSubmit,
   confirmLoading,
-  workStationManagers = [], // default to empty array
+  workStationManagers = [],
 }) => {
   const [form] = Form.useForm();
 

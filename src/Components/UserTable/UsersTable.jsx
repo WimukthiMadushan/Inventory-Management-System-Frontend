@@ -1,6 +1,7 @@
-import React from "react";
+import { useState } from "react";
 import { Select } from "antd";
 import Pagination from "../Pagination/Pagination";
+import DeleteConfirmationPopup from "../DeleteConfirmationPopup/DeleteConfirmationPopup";
 
 const UsersTable = ({
   users,
@@ -9,7 +10,23 @@ const UsersTable = ({
   totalPages,
   limit,
   setLimit,
+  DeleteUser,
 }) => {
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteUserId, setDeleteUserId] = useState(null);
+
+  const handleDelete = (id) => {
+    //console.log("Delete", id);
+    setDeleteUserId(id);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    //console.log("Confirmed Delete:", deleteUserId);
+    DeleteUser(deleteUserId);
+    setShowDeleteModal(false);
+  };
+
   const handleItemsPerPageChange = (value) => {
     setLimit(Number(value));
     setCurrentPage(1);
@@ -50,9 +67,9 @@ const UsersTable = ({
               </tr>
             </thead>
             <tbody className="text-gray-600 text-center">
-              {paginatedUsers.map((user) => (
+              {paginatedUsers.map((user, index) => (
                 <tr
-                  key={user._id}
+                  key={user._id || index}
                   className="border-t border-gray-200 text-center"
                 >
                   <td className="px-4 py-2">{user.name}</td>
@@ -71,13 +88,7 @@ const UsersTable = ({
                   <td className="px-4 py-2">
                     <div className="flex space-x-2 justify-center">
                       <button
-                        onClick={() => console.log("Edit", user._id)}
-                        className="px-2 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 cursor-pointer"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => console.log("Delete", user._id)}
+                        onClick={() => handleDelete(user._id)}
                         className="px-2 py-1 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200 cursor-pointer"
                       >
                         Delete
@@ -102,6 +113,11 @@ const UsersTable = ({
           No users available to display.
         </div>
       )}
+      <DeleteConfirmationPopup
+        open={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleDeleteConfirm}
+      />
     </>
   );
 };

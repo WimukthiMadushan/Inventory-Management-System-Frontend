@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import DeleteConfirmationPopup from "../DeleteConfirmationPopup/DeleteConfirmationPopup";
 import EditWorkStationPopup from "../EditWorkStationPopup/EditWorkStationPopup";
+import { useAuth } from "./../../Hooks/AuthContext.jsx";
+import { toast } from "react-toastify";
 
 const bgColors = [
   "bg-blue-100",
@@ -29,11 +31,13 @@ const SitesCollection = ({
   const [showEditModal, setShowEditModal] = useState(false);
   const [editItemId, setEditItemId] = useState(null);
 
+  const { authState } = useAuth();
+  const { role } = authState;
+
   const handleEdit = (id) => {
     setEditItemId(id);
     setShowEditModal(true);
   };
-
   const handleDelete = (id) => {
     setDeleteItemId(id);
     setShowDeleteModal(true);
@@ -48,7 +52,7 @@ const SitesCollection = ({
     setDeleteItemId(null);
   };
   const handleCloseEditModel = () => {
-    showEditModal(false);
+    setShowEditModal(false);
     setEditItemId(null);
   };
   const handleConfirmEditModel = (values) => {
@@ -59,7 +63,15 @@ const SitesCollection = ({
 
   return (
     <div className="bg-white rounded-xl shadow-md p-6 min-h-[60vh]">
-      <h1 className="text-xl font-bold text-gray-800 mb-4">All Workstations</h1>
+      <div className="flex items-center justify-between mb-[2rem]">
+        <h1 className="text-xl font-bold text-gray-800">All Workstations</h1>
+        {workstations.length > 0 && (
+          <span className="text-sm text-gray-600 font-bold">
+            Total Workstations: {workstations.length}
+          </span>
+        )}
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {workstations.map((station, index) => (
           <div
@@ -72,28 +84,30 @@ const SitesCollection = ({
               <Link to={`/sites/${station._id}`}>
                 <span>{station.workSiteName}</span>
               </Link>
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => handleEdit(station._id)}
-                  className="p-1 bg-blue-200 rounded-sm hover:bg-blue-100  cursor-pointer"
-                >
-                  <img
-                    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1wZW5jaWwtaWNvbiBsdWNpZGUtcGVuY2lsIj48cGF0aCBkPSJNMjEuMTc0IDYuODEyYTEgMSAwIDAgMC0zLjk4Ni0zLjk4N0wzLjg0MiAxNi4xNzRhMiAyIDAgMCAwLS41LjgzbC0xLjMyMSA0LjM1MmEuNS41IDAgMCAwIC42MjMuNjIybDQuMzUzLTEuMzJhMiAyIDAgMCAwIC44My0uNDk3eiIvPjxwYXRoIGQ9Im0xNSA1IDQgNCIvPjwvc3ZnPg=="
-                    alt="Edit Icon"
-                    className="w-5 h-5"
-                  />
-                </button>
-                <button
-                  onClick={() => handleDelete(station._id)}
-                  className="p-1 bg-red-200 rounded-sm hover:bg-red-100 cursor-pointer"
-                >
-                  <img
-                    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS10cmFzaC1pY29uIGx1Y2lkZS10cmFzaCI+PHBhdGggZD0iTTMgNmgxOCIvPjxwYXRoIGQ9Ik0xOSA2djE0YzAgMS0xIDItMiAySDdjLTEgMC0yLTEtMi0yVjYiLz48cGF0aCBkPSJNOCA2VjRjMC0xIDEtMiAyLTJoNGMxIDAgMiAxIDIgMnYyIi8+PC9zdmc+"
-                    alt="Delete Icon"
-                    className="w-5 h-5"
-                  />
-                </button>
-              </div>
+              {role === "admin" && (
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => handleEdit(station._id)}
+                    className="p-1 bg-blue-200 rounded-sm hover:bg-blue-100  cursor-pointer"
+                  >
+                    <img
+                      src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1wZW5jaWwtaWNvbiBsdWNpZGUtcGVuY2lsIj48cGF0aCBkPSJNMjEuMTc0IDYuODEyYTEgMSAwIDAgMC0zLjk4Ni0zLjk4N0wzLjg0MiAxNi4xNzRhMiAyIDAgMCAwLS41LjgzbC0xLjMyMSA0LjM1MmEuNS41IDAgMCAwIC42MjMuNjIybDQuMzUzLTEuMzJhMiAyIDAgMCAwIC44My0uNDk3eiIvPjxwYXRoIGQ9Im0xNSA1IDQgNCIvPjwvc3ZnPg=="
+                      alt="Edit Icon"
+                      className="w-5 h-5"
+                    />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(station._id)}
+                    className="p-1 bg-red-200 rounded-sm hover:bg-red-100 cursor-pointer"
+                  >
+                    <img
+                      src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS10cmFzaC1pY29uIGx1Y2lkZS10cmFzaCI+PHBhdGggZD0iTTMgNmgxOCIvPjxwYXRoIGQ9Ik0xOSA2djE0YzAgMS0xIDItMiAySDdjLTEgMC0yLTEtMi0yVjYiLz48cGF0aCBkPSJNOCA2VjRjMC0xIDEtMiAyLTJoNGMxIDAgMiAxIDIgMnYyIi8+PC9zdmc+"
+                      alt="Delete Icon"
+                      className="w-5 h-5"
+                    />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         ))}
@@ -101,11 +115,6 @@ const SitesCollection = ({
       {workstations.length === 0 && (
         <div className="text-center text-gray-500 mt-4">
           No workstations found.
-        </div>
-      )}
-      {workstations.length > 0 && (
-        <div className="text-center text-gray-500 mt-4">
-          Total Workstations: {workstations.length}
         </div>
       )}
 
