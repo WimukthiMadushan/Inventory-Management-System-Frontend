@@ -10,6 +10,8 @@ const HomePage = () => {
   const { userId, role } = authState;
   const navigate = useNavigate();
 
+  //dummy
+
   const handleGetStarted = () => {
     if (!userId) {
       toast.info("Please log in to continue.", { position: "bottom-right" });
