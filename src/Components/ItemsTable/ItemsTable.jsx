@@ -60,7 +60,7 @@ const ItemsTable = ({
   };
 
   const handleEdit = (id) => {
-    const item = items.find((it) => it.id === id);
+    const item = items.find((it) => it._id === id);
     setItemToEdit(item);
     setShowEditModal(true);
   };
@@ -78,7 +78,6 @@ const ItemsTable = ({
 
   return (
     <div className="flex-1 bg-white rounded-xl shadow-md p-4">
-      {/* Header */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
         <h1 className="text-xl font-bold text-gray-800">
           All Items In the Inventory
@@ -177,7 +176,7 @@ const ItemsTable = ({
                   <td>
                     <div className="flex flex-wrap gap-2 justify-center">
                       <button
-                        onClick={() => handleEdit(item.id)}
+                        onClick={() => handleEdit(item._id)}
                         className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
                       >
                         Edit

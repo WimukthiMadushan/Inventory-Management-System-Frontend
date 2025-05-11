@@ -12,7 +12,6 @@ const API_URL = import.meta.env.VITE_API_URL;
 const MainInventory = () => {
   const { worksiteId } = useParams();
   const [items, setItems] = useState([]);
-  const [allItems, setAllItems] = useState([]);
   const [workstations, setWorkstations] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -48,8 +47,8 @@ const MainInventory = () => {
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/Items/getItems`
       );
-      console.log("All items response:", response.data);
-      setAllItems(response.data);
+      //console.log("All items response:", response.data);
+      setItems(response.data);
     } catch (error) {
       console.error("Error fetching items:", error);
     }
@@ -184,7 +183,7 @@ const MainInventory = () => {
     }
   };
   const handleSend = async (values) => {
-    console.log("Send Item Submitted:", values);
+    //console.log("Send Item Submitted:", values);
     try {
       await axios.post(`${API_URL}/Items/sendItem`, {
         itemId: values.item,
@@ -194,13 +193,6 @@ const MainInventory = () => {
         userId: userId,
       });
       setItems((prevItems) =>
-        prevItems.map((item) =>
-          item._id === values.item
-            ? { ...item, quantity: item.quantity - values.quantity }
-            : item
-        )
-      );
-      setAllItems((prevItems) =>
         prevItems.map((item) =>
           item._id === values.item
             ? { ...item, quantity: item.quantity - values.quantity }
@@ -221,7 +213,7 @@ const MainInventory = () => {
         loadItems={loadItems}
         onSearch={handleSearch}
         worksiteId={worksiteId}
-        items={allItems}
+        items={items}
         workstations={workstations}
         onSend={handleSend}
       />
