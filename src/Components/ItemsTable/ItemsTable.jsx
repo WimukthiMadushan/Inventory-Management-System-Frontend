@@ -148,7 +148,7 @@ const ItemsTable = ({
                   </td>
                   <td className="px-4 py-2">{item.quantity}</td>
                   <td className="px-4 py-2">{item.lastUpdated}</td>
-                  <td className="px-4 py-2 flex flex-wrap gap-1 justify-center">
+                  <td className="px-4 py-2 flex flex-wrap gap-1 justify-center mt-[0.9rem]">
                     <button
                       onClick={() => handleIncrease(item._id)}
                       className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
