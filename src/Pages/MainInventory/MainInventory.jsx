@@ -13,6 +13,7 @@ const MainInventory = () => {
   const { worksiteId } = useParams();
   const [items, setItems] = useState([]);
   const [workstations, setWorkstations] = useState([]);
+  const [transactions, setTransaction] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -183,7 +184,7 @@ const MainInventory = () => {
     }
   };
   const handleSend = async (values) => {
-    //console.log("Send Item Submitted:", values);
+    console.log("Send Item Submitted:", values);
     try {
       await axios.post(`${API_URL}/Items/sendItem`, {
         itemId: values.item,
