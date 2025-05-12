@@ -67,15 +67,13 @@ const UsersPage = () => {
       console.error("Error deleting user:", error);
 
       // Check for known backend error messages
-      if (error.response?.status === 400 && error.response?.data?.message) {
+      if (error.response?.status === 400) {
         toast.info(error.response.data.message);
       } else if (error.response?.status === 404) {
         toast.warn("User not found.");
       } else {
         toast.error("Failed to delete user.");
       }
-
-      setError("Failed to delete user");
     } finally {
       setLoading(false);
     }
