@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 
 const CLOUDINARY_UPLOAD_URL = import.meta.env.VITE_CLOUDINARY_URL;
 const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_PRESET;
+const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 const AddNewItem = ({ onSubmit, worksiteId }) => {
   const [loading, setLoading] = useState(false);
@@ -49,7 +50,7 @@ const AddNewItem = ({ onSubmit, worksiteId }) => {
     //console.log("Form submitted with values:", completeValues);
     try {
       const response = await axios.post(
-        "http://localhost:3000/Items/addItem",
+        `${VITE_API_URL}/Items/addItem`,
         completeValues
       );
       toast.success("Item added successfully!");
