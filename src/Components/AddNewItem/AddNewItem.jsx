@@ -30,10 +30,8 @@ const AddNewItem = ({ onSubmit, worksiteId }) => {
       const response = await axios.post(CLOUDINARY_UPLOAD_URL, formData);
       setImageUrl(response.data.secure_url);
       setUploadSuccess(true);
-      message.success("Image uploaded successfully!");
     } catch (error) {
       console.error("Cloudinary upload error:", error);
-      message.error("Image upload failed!");
     } finally {
       setUploading(false);
     }
