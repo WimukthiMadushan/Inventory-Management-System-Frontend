@@ -1,5 +1,6 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -12,6 +13,7 @@ export const AuthProvider = ({ children }) => {
   });
 
   let logoutTimer;
+  const navigate = useNavigate();
 
   const login = (token) => {
     try {
@@ -50,6 +52,7 @@ export const AuthProvider = ({ children }) => {
       name: null,
     });
     localStorage.removeItem("authToken");
+    navigate("/");
   };
 
   useEffect(() => {

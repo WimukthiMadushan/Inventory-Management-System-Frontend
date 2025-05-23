@@ -73,9 +73,9 @@ const WorkStation = () => {
     setPage(1);
   };
   const handleSend = async (values) => {
-    console.log("Send Item Submitted:", values);
+    //console.log("Send Item Submitted:", values);
     try {
-      await axios.post(`${API_URL}/Items/sendItem`, {
+      await axios.post(`${API_URL}/Items/sendItemToStoreRoom`, {
         itemId: values.item,
         from: values.from,
         to: values.to,
@@ -120,6 +120,7 @@ const WorkStation = () => {
           setCurrentPage={setPage}
           totalPages={totalPages}
           limit={limit}
+          workstations={workstations}
           setLimit={setLimit}
           loading={loading}
           error={error}

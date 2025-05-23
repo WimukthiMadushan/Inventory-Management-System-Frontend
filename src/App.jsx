@@ -5,9 +5,12 @@ import NavBar from "./Components/NavBar/NavBar";
 import HomePage from "./Pages/HomePage/HomePage";
 import Sites from "./Pages/Sites/Sites";
 import WorkStation from "./Pages/WorkStation/WorkStation";
-import MainInventory from "./Pages/MainInventory/MainInventory";
 import UsersPage from "./Pages/UsersPage/UsersPage";
 import SummaryPage from "./Pages/SummaryPage/SummaryPage.jsx";
+import StoreRoom from "./Pages/StoreRoom/StoreRoom.jsx";
+import RepairRoom from "./Pages/RepairRoom/RepairRoom.jsx";
+import Trash from "./Pages/Trash/Trash.jsx";
+import Inventory from "./Pages/Inventory/Inventory.jsx";
 
 function App() {
   const { authState } = useAuth();
@@ -31,12 +34,16 @@ function App() {
       <NavBar />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        {(role === "admin" || role === "manager") && (
-          <Route
-            path="/main-inventory/:worksiteId"
-            element={<MainInventory />}
-          />
+        {role === "admin" && (
+          <Route path="/inventory" element={<Inventory />} />
         )}
+        {(role === "admin" || role === "manager") && (
+          <Route path="/store-room/:worksiteId" element={<StoreRoom />} />
+        )}
+        {role === "admin" && (
+          <Route path="/repair-room/:Id" element={<RepairRoom />} />
+        )}
+        {role === "admin" && <Route path="/trash/:Id" element={<Trash />} />}
 
         {userId && (role === "admin" || role === "manager") && (
           <>

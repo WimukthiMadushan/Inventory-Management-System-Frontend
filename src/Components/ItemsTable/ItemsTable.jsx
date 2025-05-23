@@ -19,6 +19,7 @@ const ItemsTable = ({
   DecreaseItem,
   EditItem,
   DeleteItem,
+  workstations,
 }) => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showRemoveModal, setShowRemoveModal] = useState(false);
@@ -80,7 +81,7 @@ const ItemsTable = ({
     <div className="flex-1 bg-white rounded-xl shadow-md p-4">
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
         <h1 className="text-xl font-bold text-gray-800">
-          All Items In the Inventory
+          All Items In the Store Room
         </h1>
         <div className="flex items-center space-x-2">
           <label className="font-medium">Items per page:</label>
@@ -111,6 +112,8 @@ const ItemsTable = ({
                 <th className="px-4 py-2">Item Name</th>
                 <th className="px-4 py-2">Availability</th>
                 <th className="px-4 py-2">Stock Quantity</th>
+                <th className="px-4 py-2">Arrived From</th>
+                <th className="px-4 py-2">Price Per Item(Rs.)</th>
                 <th className="px-4 py-2">Last Updated</th>
                 <th className="px-4 py-2">Controls</th>
                 <th className="px-4 py-2">Actions</th>
@@ -146,7 +149,12 @@ const ItemsTable = ({
                     </span>
                   </td>
                   <td className="px-4 py-2">{item.quantity}</td>
-                  <td className="px-4 py-2">{item.lastUpdated}</td>
+                  <td className="px-4 py-2">
+                    {workstations.find((ws) => ws._id === item.fromSite)
+                      ?.workSiteName || "Directly Entered To The Store"}
+                  </td>
+                  <td className="px-4 py-2">{item.pricePerItem}</td>
+                  <td className="px-4 py-2">{item.updatedAt.split("T")[0]}</td>
                   <td className="px-4 py-2 flex flex-wrap gap-1 justify-center mt-[0.9rem]">
                     <button
                       onClick={() => handleIncrease(item._id)}

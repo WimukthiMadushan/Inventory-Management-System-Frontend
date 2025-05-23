@@ -7,7 +7,9 @@ import { useAuth } from "./../../Hooks/AuthContext.jsx";
 import { toast } from "react-toastify";
 
 const API_URL = import.meta.env.VITE_API_URL;
-const MainInventoryID = import.meta.env.VITE_MAIN_INVENTORY_ID;
+const STORE_ROOM_ID = import.meta.env.VITE_MAIN_INVENTORY_ID;
+const DAMAGE_REPAIR_ROOM_ID = import.meta.env.VITE_DAMAGE_REPAIR_ROOM_ID;
+const TRASH_ROOM_ID = import.meta.env.VITE_TRASH_ROOM_ID;
 
 const Sites = () => {
   const [workstations, setWorkstations] = useState([]);
@@ -22,7 +24,6 @@ const Sites = () => {
   const loadWorkStationManagers = async () => {
     try {
       const response = await axios.get(`${API_URL}/User/getmanagers`);
-      //console.log("Work Station Managers:", response.data);
       setWorkStationManagers(response.data);
     } catch (error) {
       console.error("Error loading work station managers:", error);
@@ -39,8 +40,11 @@ const Sites = () => {
       const response = await axios.get(
         `${API_URL}/WorkSite/getSites?search=${searchTerm}`
       );
+
+      const excludedIds = [STORE_ROOM_ID, DAMAGE_REPAIR_ROOM_ID, TRASH_ROOM_ID];
+
       const filteredWorkstations = response.data.filter(
-        (workstation) => workstation._id !== MainInventoryID
+        (workstation) => !excludedIds.includes(workstation._id)
       );
       setWorkstations(filteredWorkstations);
     } catch (error) {

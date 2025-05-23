@@ -1,13 +1,23 @@
 import { useState } from "react";
-import { Form, Input, Button, Upload } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  Upload,
+  Select,
+  DatePicker,
+  InputNumber,
+} from "antd";
 import { useAuth } from "./../../Hooks/AuthContext.jsx";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { toast } from "react-toastify";
+import dayjs from "dayjs";
 
 const CLOUDINARY_UPLOAD_URL = import.meta.env.VITE_CLOUDINARY_URL;
 const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_PRESET;
 const VITE_API_URL = import.meta.env.VITE_API_URL;
+const MAIN_INVENTORY_ID = import.meta.env.VITE_MAIN_INVENTORY_ID;
 
 const AddNewItem = ({ onSubmit, worksiteId }) => {
   const [loading, setLoading] = useState(false);
@@ -40,14 +50,22 @@ const AddNewItem = ({ onSubmit, worksiteId }) => {
 
   const handleFinish = async (values) => {
     setLoading(true);
+    const { itemSubCategory, itemType, date } = values;
+
+    const formattedDate = dayjs(date).format("YYYY-MM-DD");
+    const itemName = itemType
+      ? `${itemSubCategory || "Item"}-${itemType}-${formattedDate}`
+      : `${itemSubCategory || "Item"}-${formattedDate}`;
+
     const completeValues = {
       ...values,
-      workSiteId: worksiteId,
+      itemName,
+      workSiteId: MAIN_INVENTORY_ID,
       image: imageUrl,
-      userId: userId,
+      userId,
+      date: dayjs(date).format("YYYY-MM-DD"),
     };
 
-    //console.log("Form submitted with values:", completeValues);
     try {
       const response = await axios.post(
         `${VITE_API_URL}/Items/addItem`,
@@ -66,7 +84,12 @@ const AddNewItem = ({ onSubmit, worksiteId }) => {
   };
 
   return (
-    <Form layout="vertical" onFinish={handleFinish} form={form}>
+    <Form
+      layout="vertical"
+      onFinish={handleFinish}
+      form={form}
+      initialValues={{ date: dayjs(), workSite: "Store Room" }}
+    >
       <Form.Item label="Upload Image">
         {!imageUrl ? (
           <>
@@ -125,11 +148,27 @@ const AddNewItem = ({ onSubmit, worksiteId }) => {
       </Form.Item>
 
       <Form.Item
-        label="Item Name"
-        name="itemName"
-        rules={[{ required: true, message: "Please enter the item name" }]}
+        label="Category"
+        name="itemCategory"
+        rules={[{ required: true, message: "Please select a category" }]}
       >
-        <Input placeholder="Enter item name" />
+        <Select placeholder="Select category">
+          <Option value="Reusable">Reusable</Option>
+          <Option value="Tools">Tools</Option>
+          <Option value="Consumable">Consumable</Option>
+        </Select>
+      </Form.Item>
+
+      <Form.Item
+        label="Item Sub Category"
+        name="itemSubCategory"
+        rules={[{ required: true, message: "Please enter item sub-category" }]}
+      >
+        <Input placeholder="Enter sub-category" />
+      </Form.Item>
+
+      <Form.Item label="Item Type (Optional)" name="itemType">
+        <Input placeholder="Enter item type (optional)" />
       </Form.Item>
 
       <Form.Item
@@ -137,15 +176,43 @@ const AddNewItem = ({ onSubmit, worksiteId }) => {
         name="quantity"
         rules={[{ required: true, message: "Please enter quantity" }]}
       >
-        <Input type="number" placeholder="Enter quantity" />
+        <InputNumber
+          placeholder="Enter quantity"
+          min={0}
+          step={1}
+          precision={0} // ensures integer input
+          style={{ width: "100%" }}
+        />
       </Form.Item>
 
-      <Form.Item label="Work Site">
+      <Form.Item
+        label="Price Per Item"
+        name="pricePerItem"
+        rules={[{ required: true, message: "Please enter price per item" }]}
+      >
+        <InputNumber
+          placeholder="Enter price"
+          min={0}
+          step={0.01}
+          precision={2}
+          stringMode
+          style={{ width: "100%" }}
+        />
+      </Form.Item>
+
+      <Form.Item
+        label="Date"
+        name="date"
+        rules={[{ required: true, message: "Please select date" }]}
+      >
+        <DatePicker style={{ width: "100%" }} />
+      </Form.Item>
+
+      <Form.Item rules={[{ required: true }]} name="workSite">
         <Input value="Main Inventory" disabled />
       </Form.Item>
 
-      {/* Hidden field to actually submit "Main Inventory" */}
-      <Form.Item name="workSite" initialValue="Main Inventory" hidden>
+      <Form.Item name="workSite" placeholder="Store Room" hidden>
         <Input />
       </Form.Item>
 

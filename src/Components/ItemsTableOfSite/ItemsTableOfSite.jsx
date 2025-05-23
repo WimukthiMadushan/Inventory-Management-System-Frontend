@@ -9,8 +9,7 @@ const ItemsTableOfSite = ({
   totalPages,
   limit,
   setLimit,
-  loading,
-  error,
+  workstations,
 }) => {
   const [previewImage, setPreviewImage] = useState(null);
 
@@ -50,6 +49,7 @@ const ItemsTableOfSite = ({
               <th className="px-4 py-2">Image</th>
               <th className="px-4 py-2">Item Name</th>
               <th className="px-4 py-2">Stock Quantity</th>
+              <th className="px-4 py-2">Arrived From</th>
               <th className="px-4 py-2">Availability</th>
               <th className="px-4 py-2">Last Updated</th>
             </tr>
@@ -75,6 +75,11 @@ const ItemsTableOfSite = ({
                   <td className="px-4 py-2">{item.itemName}</td>
                   <td className="px-4 py-2">{item.quantity}</td>
                   <td className="px-4 py-2">
+                    {workstations.find((ws) => ws._id === item.fromSite)
+                      ?.workSiteName || "Enter To Store"}
+                  </td>
+
+                  <td className="px-4 py-2">
                     {item.quantity > 0 ? (
                       <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">
                         In Stock
@@ -85,7 +90,7 @@ const ItemsTableOfSite = ({
                       </span>
                     )}
                   </td>
-                  <td className="px-4 py-2">{item.lastUpdated}</td>
+                  <td className="px-4 py-2">{item.updatedAt.split("T")[0]}</td>
                 </tr>
               ))
             ) : (

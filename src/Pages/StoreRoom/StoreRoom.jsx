@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import Bar from "../../Components/Bar/Bar";
-import ItemsTable from "../../Components/ItemsTable/ItemsTable";
-import TableSkelton from "../../Components/Skelton/TableSkelton";
-import { useAuth } from "./../../Hooks/AuthContext.jsx";
+import Bar from "../../Components/Bar/Bar.jsx";
+import ItemsTable from "../../Components/ItemsTable/ItemsTable.jsx";
+import TableSkelton from "../../Components/Skelton/TableSkelton.jsx";
+import { useAuth } from "../../Hooks/AuthContext.jsx";
 import { toast } from "react-toastify";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-const MainInventory = () => {
+const StoreRoom = () => {
   const { worksiteId } = useParams();
   const [items, setItems] = useState([]);
   const [workstations, setWorkstations] = useState([]);
@@ -236,10 +236,11 @@ const MainInventory = () => {
           DecreaseItem={DecreaseItem}
           EditItem={EditItem}
           DeleteItem={DeleteItem}
+          workstations={workstations}
         />
       )}
     </div>
   );
 };
 
-export default MainInventory;
+export default StoreRoom;

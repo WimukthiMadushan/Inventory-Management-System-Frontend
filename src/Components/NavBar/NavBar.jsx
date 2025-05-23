@@ -9,7 +9,9 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const API_URL = import.meta.env.VITE_API_URL;
-const MainInventoryID = import.meta.env.VITE_MAIN_INVENTORY_ID;
+const STORE_ROOM_ID = import.meta.env.VITE_MAIN_INVENTORY_ID;
+const DAMAGE_REPAIR_ROOM_ID = import.meta.env.VITE_DAMAGE_REPAIR_ROOM_ID;
+const TRASH_ROOM_ID = import.meta.env.VITE_TRASH_ROOM_ID;
 
 const NavBar = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -64,11 +66,26 @@ const NavBar = () => {
           <Link to="/" onClick={() => setDrawerVisible(false)}>
             Home
           </Link>
+          <Link to="/inventory" onClick={() => setDrawerVisible(false)}>
+            Inventory
+          </Link>
           <Link
-            to={`/main-inventory/${MainInventoryID}`}
+            to={`/store-room/${STORE_ROOM_ID}`}
             onClick={() => setDrawerVisible(false)}
           >
-            Main Inventory
+            Store Room
+          </Link>
+          <Link
+            to={`/repair-room/${DAMAGE_REPAIR_ROOM_ID}`}
+            onClick={() => setDrawerVisible(false)}
+          >
+            Damage/Repair
+          </Link>
+          <Link
+            to={`/trash/${TRASH_ROOM_ID}`}
+            onClick={() => setDrawerVisible(false)}
+          >
+            Trash
           </Link>
           <Link to="/sites" onClick={() => setDrawerVisible(false)}>
             Work Sites

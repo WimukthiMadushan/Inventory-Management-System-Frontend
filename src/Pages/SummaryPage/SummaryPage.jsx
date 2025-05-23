@@ -6,15 +6,21 @@ import {
   ClockCircleOutlined,
   StopOutlined,
   EnvironmentOutlined,
+  ToolOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
 import DetailsBox from "../../Components/DetailsBox/DetailsBox";
 import FilterSection from "../../Components/FilterSection/FilterSection";
 import TransactionSteps from "../../Components/TransactionSteps/TransactionSteps";
 
 const API_URL = import.meta.env.VITE_API_URL;
+const DAMAGE_REPAIR_ROOM_ID = import.meta.env.VITE_DAMAGE_REPAIR_ROOM_ID;
+const TRASH_ROOM_ID = import.meta.env.VITE_TRASH_ROOM_ID;
 
 const SummaryPage = () => {
   const [totalItems, setTotalItems] = useState(0);
+  const [itemsInTheRepair, setItemsInTheRepair] = useState(0);
+  const [itemsInTheTrash, setItemsInTheTrash] = useState(0);
   const [itemsCategories, setItemsCategories] = useState([]);
   const [allManagers, setAllManagers] = useState(0);
   const [admins, setAdmins] = useState(0);
@@ -22,7 +28,6 @@ const SummaryPage = () => {
   const [allWorksites, setAllWorksites] = useState([]);
   const [transaction, setTransaction] = useState([]);
 
-  // API Calls
   const loadTotalItems = async () => {
     try {
       const res = await axios.get(`${API_URL}/Items/getItemsQuantity`);
@@ -77,6 +82,28 @@ const SummaryPage = () => {
     }
   };
 
+  const loadItemsInTheRepair = async () => {
+    try {
+      const res = await axios.get(
+        `${API_URL}/Items/getItemsInRepair/${DAMAGE_REPAIR_ROOM_ID}`
+      );
+      setItemsInTheRepair(res.data.totalQuantity);
+    } catch (err) {
+      console.error("Error fetching items in repair:", err);
+    }
+  };
+
+  const loadItemsInTheTrash = async () => {
+    try {
+      const res = await axios.get(
+        `${API_URL}/Items/getItemsInTrash/${TRASH_ROOM_ID}`
+      );
+      setItemsInTheTrash(res.data.totalQuantity);
+    } catch (err) {
+      console.error("Error fetching items in trash:", err);
+    }
+  };
+
   const handleSubmit = async (filters) => {
     const payload = {};
     if (filters.fromSite) payload.fromSite = filters.fromSite;
@@ -105,6 +132,8 @@ const SummaryPage = () => {
     loadAdmins();
     loadAllWorksites();
     loadAllUsers();
+    loadItemsInTheRepair();
+    loadItemsInTheTrash();
   }, []);
 
   // Maps
@@ -152,8 +181,23 @@ const SummaryPage = () => {
           icon={<EnvironmentOutlined />}
           title="All Worksites"
           subtitle="Number of Active Worksites"
-          value={allWorksites.length - 1}
+          value={allWorksites.length - 3}
           iconBg="bg-purple-100 text-purple-500"
+        />
+        <DetailsBox
+          icon={<ToolOutlined />}
+          title="Items in Repair"
+          subtitle="Total items currently under repair"
+          value={itemsInTheRepair}
+          iconBg="bg-blue-100 text-blue-500"
+        />
+
+        <DetailsBox
+          icon={<DeleteOutlined />}
+          title="Items in Trash"
+          subtitle="Total items in the trash"
+          value={itemsInTheTrash}
+          iconBg="bg-pink-100 text-pink-500"
         />
       </div>
 
