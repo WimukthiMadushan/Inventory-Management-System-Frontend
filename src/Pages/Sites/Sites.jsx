@@ -62,7 +62,7 @@ const Sites = () => {
     setSearchTerm(value);
   };
   const handleDeleteWorkStation = async (id) => {
-    console.log("Delete Workstation", id);
+    //console.log("Delete Workstation", id);
     try {
       await axios.delete(`${API_URL}/WorkSite/deleteSite/${id}`, {
         data: { userId: userId },
@@ -78,7 +78,7 @@ const Sites = () => {
     }
   };
   const handleEditWorkStation = async (values) => {
-    console.log("Edit Workstation", values);
+    //console.log("Edit Workstation", values);
     try {
       await axios.put(`${API_URL}/WorkSite/updateSite/${values._id}`, {
         ...values,

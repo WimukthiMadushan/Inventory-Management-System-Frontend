@@ -23,7 +23,7 @@ const UsersPage = () => {
       const response = await axios.get(`${API_URL}/User/getusersbypagination`, {
         params: { page, limit, search: searchText },
       });
-      console.log(response);
+      //console.log(response);
       setUsers(response.data.users);
       setPage(response.data.currentPage);
       setTotalPages(response.data.totalPages);

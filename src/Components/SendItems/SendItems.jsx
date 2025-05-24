@@ -18,7 +18,7 @@ const SendItems = ({
   const availableQuantity = selectedItem?.quantity || 0;
 
   const sourceWorkstation = workstations.find((ws) => ws._id === worksiteId);
-  console.log("Source Workstation:", sourceWorkstation);
+  //console.log("Source Workstation:", sourceWorkstation);
 
   const handleSubmit = (values) => {
     console.log("Form values:", values);

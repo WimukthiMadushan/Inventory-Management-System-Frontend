@@ -145,7 +145,7 @@ const StoreRoom = () => {
     }
   };
   const EditItem = async (value) => {
-    console.log("EditItem", value);
+    //console.log("EditItem", value);
     try {
       await axios.put(`${API_URL}/Items/updateItem/${value._id}`, {
         itemName: value.name,
@@ -184,7 +184,7 @@ const StoreRoom = () => {
     }
   };
   const handleSend = async (values) => {
-    console.log("Send Item Submitted:", values);
+    //console.log("Send Item Submitted:", values);
     try {
       await axios.post(`${API_URL}/Items/sendItem`, {
         itemId: values.item,

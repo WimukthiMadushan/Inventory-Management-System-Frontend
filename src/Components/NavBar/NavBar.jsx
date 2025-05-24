@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Drawer } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
 import Logo from "./../../assets/Logo.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Login from "../Login/Login";
 import { useAuth } from "./../../Hooks/AuthContext.jsx";
 import axios from "axios";
@@ -22,6 +22,21 @@ const NavBar = () => {
   const navigate = useNavigate();
   const { authState, logout, login } = useAuth();
   const { userId, role, name } = authState;
+
+  const location = useLocation();
+  const isActive = (path) => location.pathname === path;
+
+  const baseLinkClass =
+    "relative text-gray-700 font-medium transition-colors duration-200 hover:text-gray-600 " +
+    "after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gray-600 " +
+    "after:transition-all after:duration-300 hover:after:w-full";
+
+  const getLinkClass = (path) =>
+    `${baseLinkClass} ${
+      isActive(path)
+        ? "after:w-full after:bg-gray-600 text-gray-600 font-semibold"
+        : ""
+    }`;
 
   const showModal = (tab) => {
     setActiveTab(tab);
@@ -63,34 +78,53 @@ const NavBar = () => {
     <>
       {userId && role === "admin" && (
         <>
-          <Link to="/" onClick={() => setDrawerVisible(false)}>
+          <Link
+            to="/"
+            onClick={() => setDrawerVisible(false)}
+            className={getLinkClass("/")}
+          >
             Home
           </Link>
-          <Link to="/inventory" onClick={() => setDrawerVisible(false)}>
+          <Link
+            to="/inventory"
+            onClick={() => setDrawerVisible(false)}
+            className={getLinkClass("/inventory")}
+          >
             Inventory
           </Link>
           <Link
             to={`/store-room/${STORE_ROOM_ID}`}
             onClick={() => setDrawerVisible(false)}
+            className={getLinkClass(`/store-room/${STORE_ROOM_ID}`)}
           >
             Store Room
           </Link>
           <Link
             to={`/repair-room/${DAMAGE_REPAIR_ROOM_ID}`}
             onClick={() => setDrawerVisible(false)}
+            className={getLinkClass(`/repair-room/${DAMAGE_REPAIR_ROOM_ID}`)}
           >
             Damage/Repair
           </Link>
           <Link
             to={`/trash/${TRASH_ROOM_ID}`}
             onClick={() => setDrawerVisible(false)}
+            className={getLinkClass(`/trash/${TRASH_ROOM_ID}`)}
           >
             Trash
           </Link>
-          <Link to="/sites" onClick={() => setDrawerVisible(false)}>
+          <Link
+            to="/sites"
+            onClick={() => setDrawerVisible(false)}
+            className={getLinkClass("/sites")}
+          >
             Work Sites
           </Link>
-          <Link to="/users" onClick={() => setDrawerVisible(false)}>
+          <Link
+            to="/users"
+            onClick={() => setDrawerVisible(false)}
+            className={getLinkClass("/users")}
+          >
             Users
           </Link>
           <Link to="/summary" onClick={() => setDrawerVisible(false)}>

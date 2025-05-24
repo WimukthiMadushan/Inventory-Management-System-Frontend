@@ -47,7 +47,7 @@ const Inventory = () => {
   const loadAllItems = async () => {
     try {
       const response = await axios.get(`${API_URL}/Items/getItems`);
-      console.log("All items response:", response.data);
+      //console.log("All items response:", response.data);
       SetAllItems(response.data);
     } catch (error) {
       console.error("Error fetching all items:", error);

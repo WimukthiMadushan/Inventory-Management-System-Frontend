@@ -188,7 +188,7 @@ const AddNewItem = ({ onSubmit, worksiteId }) => {
       <Form.Item
         label="Price Per Item"
         name="pricePerItem"
-        rules={[{ required: true, message: "Please enter price per item" }]}
+        rules={[{ required: false, message: "Please enter price per item" }]}
       >
         <InputNumber
           placeholder="Enter price"

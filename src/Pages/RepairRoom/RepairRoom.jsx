@@ -34,7 +34,7 @@ const RepairRoom = () => {
   const loadItems = async () => {
     setLoading(true);
     try {
-      console.log(selectedSite);
+      //console.log(selectedSite);
       const response = await axios.post(
         `${API_URL}/Items/getItemsFromSiteAndWorkSite`,
         {
