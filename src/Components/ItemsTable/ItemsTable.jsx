@@ -158,25 +158,25 @@ const ItemsTable = ({
                   <td className="px-4 py-2 flex flex-wrap gap-1 justify-center mt-[0.9rem]">
                     <button
                       onClick={() => handleIncrease(item._id)}
-                      className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+                      className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200 cursor-pointer"
                     >
                       +
                     </button>
                     <button
                       onClick={() => handleDecrease(item._id)}
-                      className="px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200"
+                      className="px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 cursor-pointer"
                     >
                       -
                     </button>
                     <button
                       onClick={() => handleAddItem(item._id)}
-                      className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+                      className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200 cursor-pointer"
                     >
                       Add
                     </button>
                     <button
                       onClick={() => handleRemoveItem(item._id)}
-                      className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+                      className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200 cursor-pointer"
                     >
                       Remove
                     </button>
@@ -185,13 +185,13 @@ const ItemsTable = ({
                     <div className="flex flex-wrap gap-2 justify-center">
                       <button
                         onClick={() => handleEdit(item._id)}
-                        className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                        className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200 cursor-pointer"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDelete(item._id)}
-                        className="px-2 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200"
+                        className="px-2 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 cursor-pointer"
                       >
                         Delete
                       </button>
